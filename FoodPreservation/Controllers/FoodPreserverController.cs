@@ -15,7 +15,7 @@
             var rnd = new Random();
             return new
             {
-                asdf = new List<ItemToExpire>
+                items = new List<ItemToExpire>
                 {
                     new ItemToExpire { Name = "Tomato", Quantity = rnd.Next(0, 5) },
                     new ItemToExpire { Name = "Beans", Quantity = rnd.Next(0, 25) }
