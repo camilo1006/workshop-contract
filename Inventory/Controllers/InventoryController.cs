@@ -2,10 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text.Json;
     using System.Threading.Tasks;
     using Dto;
     using Microsoft.AspNetCore.Mvc;
@@ -14,6 +10,13 @@
     [Route("[controller]")]
     public class InventoryController : ControllerBase
     {
+        private readonly IFoodPreservationService _foodPreservationService;
+
+        public InventoryController(IFoodPreservationService foodPreservationService)
+        {
+            _foodPreservationService = foodPreservationService;
+        }
+
         [HttpGet]
         public async Task<object> Get()
         {
@@ -25,28 +28,12 @@
                 new InventoryItem { Name = "Beans", Quantity = rnd.Next(0, 50) }
             };
 
-            var client = new HttpClient { BaseAddress = new Uri("https://localhost:5001/") };
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            try
-            {
-                var requestPreserver = await client.GetAsync("FoodPreserver");
-                var responsePreserver = JsonSerializer.Deserialize<ResponsePreserver>(requestPreserver.Content.ReadAsStringAsync().Result);
-                listInventory.ForEach(inventoryItem =>
-                {
-                    inventoryItem.Quantity -= (responsePreserver.items.FirstOrDefault(i => i.name.Equals(inventoryItem.Name))?.quantity ?? 0);
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return new
-            {
-                items = listInventory,
-                date = DateTime.Now
-            };
+            return await _foodPreservationService.FoodPreservation(listInventory);
         }
+    }
+
+    public interface IFoodPreservationService
+    {
+        Task<object> FoodPreservation(List<InventoryItem> listInventory);
     }
 }
