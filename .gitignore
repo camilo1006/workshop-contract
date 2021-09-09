@@ -1,5 +1,16 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
 Inventory/bin
 Inventory/obj
 
 FoodPreservation/bin
 FoodPreservation/obj
+
+ContractTest/bin
+ContractTest/obj
+
+*/pacts

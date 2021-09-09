@@ -14,9 +14,9 @@
     {
         private readonly HttpClient _client;
 
-        public FoodPreservationService(string baseUri = null)
+        public FoodPreservationService(Uri baseUri = null)
         {
-            _client = new HttpClient { BaseAddress = new Uri("https://localhost:5001/") };
+            _client = new HttpClient { BaseAddress = baseUri };
         }
 
         public async Task<object> FoodPreservation(List<InventoryItem> listInventory)
