@@ -46,13 +46,14 @@
                     {
                         { "Content-Type", "application/json; charset=utf-8" }
                     },
-                    Body =
-                        new
+                    Body = new {
+                        items = Match.MinType(new
                         {
-                            id = "tester",
-                            firstName = "Totally",
-                            lastName = "Awesome"
-                        }
+                            name = Match.Type("Potato"),
+                            quantity = Match.Type(.5)
+                        }, 1),
+                        date = Match.Type(DateTime.Now)
+                    }
                 });
 
             //Act
