@@ -1,4 +1,4 @@
-namespace ContractTest.ContractConsumerTest
+﻿namespace ContractTest.ContractConsumerTest
 {
     using System;
     using System.IO;
@@ -34,6 +34,12 @@ namespace ContractTest.ContractConsumerTest
         public void Dispose()
         {
             PactBuilder.Build();
+            var pactPublisher =
+                new PactPublisher(ContractInfo._pactUrl, new PactUriOptions(ContractInfo._token));
+            pactPublisher.PublishToBroker(
+                $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}pacts{Path.DirectorySeparatorChar}" +
+                "inventory-foodpreservation.json",
+                ContractInfo._consumerVersion);
         }
     }
 }
