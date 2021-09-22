@@ -1,7 +1,6 @@
-namespace ContractTest.ContractProviderTest
+﻿namespace ContractTest.ContractProviderTest
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
     using FoodPreservation;
     using Microsoft.AspNetCore;
@@ -40,7 +39,7 @@ namespace ContractTest.ContractProviderTest
                     { "Authorization", "Basic VGVzdA==" }
                 }, //This allows the user to set request headers that will be sent with every request the verifier sends to the provider
                 Verbose = true, //Output verbose verification logs to the test output
-                ProviderVersion = "version1",
+                ProviderVersion = ContractInfo._providerVersion,
                 PublishVerificationResults = true
             };
 
@@ -51,11 +50,9 @@ namespace ContractTest.ContractProviderTest
             IPactVerifier pactVerifier = new PactVerifier(config);
 
             pactVerifier
-                .ProviderState($"{serviceUri}/provider-states")
                 .ServiceProvider("FoodPreservation", serviceUri)
                 .HonoursPactWith("Inventory")
-                .PactUri(
-                    $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}pacts{Path.DirectorySeparatorChar}inventory-foodpreservation.json")
+                .PactBroker(ContractInfo._pactUrl, new PactUriOptions(ContractInfo._token))
                 .Verify();
 
             await webHost.StopAsync();
